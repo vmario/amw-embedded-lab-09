@@ -8,15 +8,12 @@ namespace {
 /**
  * Preskaler Timer/Counter0.
  */
-constexpr uint8_t TIMER_PRESCALER = _BV(CS02);
+constexpr uint8_t TIMER0_PRESCALER = _BV(CS02);
 }
 
-/**
- * Inicjalizuje Timer/Counter0.
- */
 void Timer::initialize() const
 {
-	TCCR0B = TIMER_PRESCALER;
+	TCCR0B = TIMER0_PRESCALER;
 	TIMSK0 = _BV(TOIE0);
 }
 

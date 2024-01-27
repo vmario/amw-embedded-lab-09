@@ -1,34 +1,55 @@
 #include "shifter.hpp"
 #include "display.hpp"
 #include "timer.hpp"
-#include "adc.hpp"
 
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 /**
- * Uśrednia pomiar temperatury.
+ * Obsługa przerwania przepełnienia Timer/Counter1.
+ */
+ISR(TIMER1_OVF_vect)
+{
+}
+
+/**
+ * Odliczany czas.
  *
- * @return Uśredniona temperatura.
+ * @param Wartość aktualnie odliczonego czasu w milisekundach.
  */
-uint16_t average()
+uint16_t currentTime()
 {
-	return adc.temperature();
+	return 8888;
 }
 
 /**
- * Obsługa przerwania pomiaru ADC.
- */
-ISR(ADC_vect)
-{
-	display.print(average(), 2);
-}
-
-/**
- * Obsługa przerwania komparatora Timer/Counter0.
+ * Obsługa przerwania przepełnienia Timer/Counter0.
  */
 ISR(TIMER0_OVF_vect)
 {
+	display.print(currentTime(), 3);
 	display.refresh();
+}
+
+/**
+ * Przerwanie od przycisku.
+ */
+ISR(PCINT1_vect)
+{
+}
+
+/**
+ * Pętla główna.
+ */
+void mainLoop()
+{
+}
+
+/**
+ * Inicjalizacja przerwań.
+ */
+void interruptsInitialize()
+{
 }
 
 /**
@@ -38,10 +59,11 @@ int main()
 {
 	shifter.initialize();
 	timer.initialize();
-	adc.initialize();
+	interruptsInitialize();
 
 	sei();
 
 	while (true) {
+		mainLoop();
 	}
 }

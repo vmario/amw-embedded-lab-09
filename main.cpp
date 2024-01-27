@@ -4,30 +4,20 @@
 #include "adc.hpp"
 
 #include <avr/interrupt.h>
+#include <util/delay.h>
+
+bool stop{true};
 
 /**
- * Uśrednia pomiar temperatury.
- *
- * @return Uśredniona temperatura.
+ * Obsługa przerwania komparatora Timer/Counter1.
  */
-uint16_t average()
+ISR(TIMER1_COMPA_vect)
 {
-	return adc.temperature();
-}
-
-/**
- * Obsługa przerwania pomiaru ADC.
- */
-ISR(ADC_vect)
-{
-	display.print(average(), 2);
-}
-
-/**
- * Obsługa przerwania komparatora Timer/Counter0.
- */
-ISR(TIMER0_OVF_vect)
-{
+	static uint16_t counter;
+	if (!stop) {
+		counter++;
+	}
+	display.print(counter, 3);
 	display.refresh();
 }
 
@@ -38,10 +28,15 @@ int main()
 {
 	shifter.initialize();
 	timer.initialize();
-	adc.initialize();
 
 	sei();
 
+	_delay_ms(1000);
+	stop = false;
+
 	while (true) {
+		if (bit_is_clear(PINC, 1)) {
+			stop = true;
+		}
 	}
 }

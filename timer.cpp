@@ -6,17 +6,20 @@ const Timer timer;
 
 namespace {
 /**
- * Preskaler Timer/Counter0.
+ * Konfiguracja Timer/Counter1.
  */
-constexpr uint8_t TIMER_PRESCALER = _BV(CS02);
-}
+constexpr uint8_t TIMER1_MODE = _BV(WGM12);
 
 /**
- * Inicjalizuje Timer/Counter0.
+ * Preskaler Timer/Counter1.
  */
+constexpr uint8_t TIMER1_PRESCALER = _BV(CS11);
+}
+
 void Timer::initialize() const
 {
-	TCCR0B = TIMER_PRESCALER;
-	TIMSK0 = _BV(TOIE0);
+	OCR1A = F_CPU / TIMER_FREQUENCY / 8 - 1;
+	TCCR1B = TIMER1_PRESCALER | TIMER1_MODE;
+	TIMSK1 = _BV(OCIE1A);
 }
 

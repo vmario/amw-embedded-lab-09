@@ -5,6 +5,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+volatile bool falstart;
+
 /**
  * Preskaler Timer/Counter1.
  */
@@ -36,23 +38,28 @@ ISR(TIMER0_OVF_vect)
 ISR(PCINT1_vect)
 {
 	TCCR1B = 0;
+	falstart = true;
 }
 
 void buzzerOn()
 {
 	DDRB |= _BV(5);
-	//DDRD |= _BV(3);
+	DDRD |= _BV(3);
 }
 
 void buzzerOff()
 {
 	DDRB &= ~_BV(5);
-	//DDRD &= ~_BV(3);
+	DDRD &= ~_BV(3);
 }
 
 void mainLoop()
 {
-	_delay_ms(10'000);
+	_delay_ms(5'000);
+	if (falstart) {
+		falstart = false;
+		return;
+	}
 	TCNT1 = 0;
 	buzzerOn();
 	TCCR1B = TIMER1_PRESCALER;

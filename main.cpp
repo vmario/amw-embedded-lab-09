@@ -1,24 +1,63 @@
 #include "shifter.hpp"
 #include "display.hpp"
 #include "timer.hpp"
-#include "adc.hpp"
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-bool stop{true};
+/**
+ * Preskaler Timer/Counter1.
+ */
+constexpr uint8_t TIMER1_PRESCALER = _BV(CS12) | _BV(CS10);
+
+/**
+ * Konfiguracja Timer/Counter1.
+ */
+constexpr uint8_t TIMER1_MODE = _BV(WGM12);
 
 /**
  * Obsługa przerwania komparatora Timer/Counter1.
  */
-ISR(TIMER1_COMPA_vect)
+ISR(TIMER1_OVF_vect)
 {
-	static uint16_t counter;
-	if (!stop) {
-		counter++;
-	}
-	display.print(counter, 3);
+	TCCR1B = 0;
+	TCNT1 = 0xFFFF;
+}
+
+/**
+ * Obsługa przerwania komparatora Timer/Counter1.
+ */
+ISR(TIMER0_OVF_vect)
+{
+	display.print(1.0 * TCNT1 / (16'000'000 / 1024) * 1000, 3);
 	display.refresh();
+}
+
+ISR(PCINT1_vect)
+{
+	TCCR1B = 0;
+}
+
+void buzzerOn()
+{
+	DDRB |= _BV(5);
+	//DDRD |= _BV(3);
+}
+
+void buzzerOff()
+{
+	DDRB &= ~_BV(5);
+	//DDRD &= ~_BV(3);
+}
+
+void mainLoop()
+{
+	_delay_ms(10'000);
+	TCNT1 = 0;
+	buzzerOn();
+	TCCR1B = TIMER1_PRESCALER;
+	_delay_ms(20);
+	buzzerOff();
 }
 
 /**
@@ -29,14 +68,13 @@ int main()
 	shifter.initialize();
 	timer.initialize();
 
+	PCICR |= _BV(PCIE1);
+	PCMSK1 |= _BV(PCINT9);
+	TIMSK1 = _BV(TOIE1);
+
 	sei();
 
-	_delay_ms(1000);
-	stop = false;
-
 	while (true) {
-		if (bit_is_clear(PINC, 1)) {
-			stop = true;
-		}
+		mainLoop();
 	}
 }

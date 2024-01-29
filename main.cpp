@@ -13,7 +13,7 @@ volatile bool falseStart;
 #endif
 
 /**
- * Obsługa przerwania komparatora Timer/Counter1.
+ * Obsługa przerwania przepełnienia Timer/Counter1.
  */
 ISR(TIMER1_OVF_vect)
 {
@@ -33,9 +33,11 @@ uint16_t currentTime()
 {
 #if 1
 	return 1.0 * TCNT1 / (16'000'000 / 1024) * 1000;
-#else
-	return 0;
 #endif
+#if 1
+	return TCNT1;
+#endif
+	return 8888;
 }
 
 /**
@@ -65,18 +67,30 @@ void mainLoop()
 {
 #if 1
 	_delay_ms(5'000);
+#endif
+
+#if 1
 	if (falseStart) {
 		falseStart = false;
 		return;
 	}
-	TCNT1 = 0;
+#endif
 
+#if 1
+	TCNT1 = 0;
+#endif
+
+#if 1
 	DDRB |= _BV(5);
 	//DDRD |= _BV(3);
+#endif
 
+#if 1
 	TCCR1B = _BV(CS12) | _BV(CS10);
-	_delay_ms(20);
+#endif
 
+#if 1
+	_delay_ms(20);
 	DDRB &= ~_BV(5);
 	//DDRD &= ~_BV(3);
 #endif
@@ -85,12 +99,14 @@ void mainLoop()
 /**
  * Inicjalizacja przerwań.
  */
-void interruptInitialize()
+void interruptsInitialize()
 {
 #if 1
-	TIMSK1 = _BV(TOIE1);
-	PCICR |= _BV(PCIE1);
 	PCMSK1 |= _BV(PCINT9);
+	PCICR |= _BV(PCIE1);
+#endif
+#if 1
+	TIMSK1 = _BV(TOIE1);
 #endif
 }
 
@@ -101,7 +117,7 @@ int main()
 {
 	shifter.initialize();
 	timer.initialize();
-	interruptInitialize();
+	interruptsInitialize();
 
 	sei();
 

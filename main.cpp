@@ -41,7 +41,7 @@ uint16_t currentTime()
 }
 
 /**
- * Obsługa przerwania komparatora Timer/Counter1.
+ * Obsługa przerwania przepełnienia Timer/Counter0.
  */
 ISR(TIMER0_OVF_vect)
 {

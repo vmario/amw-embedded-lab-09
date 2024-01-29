@@ -24,6 +24,7 @@ ISR(TIMER1_OVF_vect)
 {
 	TCCR1B = 0;
 	TCNT1 = 0xFFFF;
+	falstart = true;
 }
 
 /**
@@ -44,13 +45,13 @@ ISR(PCINT1_vect)
 void buzzerOn()
 {
 	DDRB |= _BV(5);
-	DDRD |= _BV(3);
+	//DDRD |= _BV(3);
 }
 
 void buzzerOff()
 {
 	DDRB &= ~_BV(5);
-	DDRD &= ~_BV(3);
+	//DDRD &= ~_BV(3);
 }
 
 void mainLoop()

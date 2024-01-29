@@ -1,5 +1,5 @@
 ---
-title: "Ćwiczenie 7: Uśrednianie danych pomiarowych"
+title: "Ćwiczenie 9: Pomiar czasu względnego za pomocą timera"
 author: [Mariusz Chilmon <<mariusz.chilmon@ctm.gdynia.pl>>]
 lang: "pl"
 titlepage: no
@@ -32,32 +32,26 @@ _W trosce o Państwa wyniki proszę o czytelne wpisywanie nazwisk._
 
 ## Zadanie podstawowe
 
-Pomiar wykonywany jest z częstotliwością 0,95&nbsp;Hz. Uśredniamy 20 ostatnich pomiarów. Z jakiego przedziału czasu uwzględniane są pomiary?
+Rozdzielczość pomiarowa timera dla dzielnika $N$ dana jest zależnością:
+
+\begin{equation}
+\Delta t = \frac{N}{f_{clkI/O}}
+\end{equation}
+
+zaś zakres pomiarowy (dla timera 16-bitowego):
+
+\begin{equation}
+t_{max} = \Delta t (2^{16} - 1)
+\end{equation}
+
+Wyznacz oba parametry dla wybranego w części praktycznej dzielnika.
 
 \vspace{3cm}
 
 ## Zadanie rozszerzone
 
-Odczytaj z procesu kompilacji rozmiar programu (segment `.text`) oraz rozmiar danych globalnych i&nbsp;statycznych w pamięci RAM (segment `.bss`) dla Twojego programu. Zwiększ liczbę uśrednianych próbek z 20 do 32 i powtórnie odczytaj rozmiary segmentów. Oblicz różnicę tych rozmiarów między dwoma wersjami programu.
+_Timer/Counter1_ posiada wejście _Input Capture Pin_ (`ICP1`). Może ono niezależnie od pracy programu skopiować wartość licznikia `TCNT1` do specjalnego rejestru `ICR1` po wystąpieniu zbocza narastającego lub opadającego. Umożliwiłoby to natychmiastowy pomiar czasu, także w sytuacji gdy przerwanie od przycisku nie może być natychmiast obsłużone (z powodu obsługiwania w tym momencie innego przerwania). Do czego jest podłączony pin `ICP1` na płytce _WPSH209_? Czy można go użyć w celu ulepszenia miernika refleksu?
 
-\begin{center}
-\begin{tabular}{ |c|c|c|c| } 
-\hline
- & $k = 20$ & $k = 32$ & Różnica \\
-\hline
-\texttt{.text} & & & \\ 
-\hline
-\texttt{.bss} & & & \\ 
-\hline
-\end{tabular}
-\end{center}
-
-Jaki rozmiar ma typ `double` lub inny użyty przez Ciebie do przechowywania poprzednich próbek? Jaki rozmiar ma zazwyczaj typ `double` na komputerach PC (zgodnie z IEEE 754)?
+\awesomebox[violet]{2pt}{\faBook}{violet}{Wykorzystanie pinu \lstinline{ICP1} omówione jest w rozdziale \textit{16-bit Timer/Counter1 with PWM} w~sekcji \textit{Input Capture Unit} dokumentacji mikrokontrolera, jednak do odpowiedzi na pytanie wystarczy odczytanie połączeń ze schematów płytek \textit{Arduino Uno} i \textit{WPSH209}.}
 
 \vspace{3cm}
-
-## \faCertificate&nbsp; Zadanie specjalne
-
-_+1 pkt dla osoby, która jako pierwsza poda poprawną odpowiedź._
-
-Dlaczego po zwiększeniu rozmiaru tablicy zmniejszył się rozmiar kodu programu, a więc liczba instrukcji?

@@ -33,7 +33,7 @@ Celem ćwiczenia jest zapoznanie się z:
 
 # Zadanie podstawowe
 
-Celem zadania podstawowego jest zaprogramowanie miernika refleksu. Urządzenie ma co około 10 sekund rozpoczynać odliczanie sygnalizowane sygnałem świetlnym lub dźwiękowym, które użytkownik ma jak najszybciej zatrzymać wciśnięciem przycisku _S1_. Czas między sygnałem a wciśnięciem przycisku ma być mierzone z rozdzielczością 1&nbsp;ms.
+Celem zadania podstawowego jest zaprogramowanie miernika refleksu. Urządzenie ma co około 10 sekund rozpoczynać odliczanie sygnalizowane sygnałem świetlnym lub dźwiękowym, które użytkownik ma jak najszybciej zatrzymać wciśnięciem przycisku _S1_. Czas między sygnałem a wciśnięciem przycisku ma być mierzony z rozdzielczością 1&nbsp;ms.
 
 ## Wymagania funkcjonalne
 
@@ -52,7 +52,7 @@ Do odmierzania czasu można użyć timera _Timer/Counter1_, który dzięki 16-bi
 
 W funkcji `currentTime()` zwróć wartość licznika `TCNT1`.
 
-Na wyświetlaczu będzie widoczna domślna wartość tego rejestru, tj. 0.
+Na wyświetlaczu będzie widoczna domyślna wartość tego rejestru, tj. 0.
 
 ### Uruchomienie timera
 
